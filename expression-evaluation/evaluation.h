@@ -3,14 +3,19 @@
 #include<string>
 #include<vector>
 
-class expression{
+// for isalnum()
+#include<cctype>
+// for istringstream
+#include<sstream>
+
+class Evaluation{
   public:
   void calculate();
   
-  private:
+  //private:
   std::vector<std::string> expression;
-  std::stack<std::vector<std::string>> postfix;
+  std::vector<std::string> postfix;
   
-  void evaluation();
-  void doPostfix();
-}
+  void doEvaluation();
+  void getPostfix();
+};
