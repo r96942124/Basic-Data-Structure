@@ -15,7 +15,8 @@ void Evaluation::calculate()
 
 void Evaluation::getPostfix()
 {
-  ;
+  postfix.clear();
+  std::stack<std::string> operand;
   
 }
 
