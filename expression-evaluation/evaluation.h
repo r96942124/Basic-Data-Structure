@@ -18,9 +18,10 @@ class Evaluation{
   static const int a=2;
   std::vector<std::string> expression;
   std::vector<std::string> postfix;
-  
+  std::vector<std::string> infix;  
+
   precendence getToken(char &symbol);
   void doEvaluation();
   void getPostfix();
-  void getInfix();
+  void getInfix(std::string &);
 };

@@ -21,14 +21,133 @@ void Evaluation::calculate()
   std::string inputExpr;
   getline(std::cin,inputExpr);
   
-  getInfix();
+  getInfix(inputExpr);
   getPostfix();
   doEvaluation();
 }
 
-void Evaluation::getPrefix()
+void Evaluation::getInfix(std::string &inputExpr)
 {
- ;
+
+    bool negative=false;
+    int numNegative=0;
+    std::string num;
+
+    std::string::iterator iter=inputExpr.begin();
+
+    if(iter==inputExpr.end())
+       throw std::runtime_error("no Expression");
+
+    while(iter!=inputExpr.end()){
+        switch(*iter){
+            case ' ': // to check" 3+4"
+                if(isdigit(*(iter+1)) && isdigit(*(iter-1))){ //ex. 2+3 4+5
+                   throw std::runtime_error("there is a blank between numbers");
+                }
+                else{
+                   ++iter;
+                   break;
+                }
+            case '(':
+                if(iter!=inputExpr.begin() && isdigit(*(iter-1))){
+                   infix.push_back("*");
+                }
+                infix.push_back("("); 
+                ++iter;
+                break;
+            case ')':
+                if(iter!=inputExpr.begin() && *(iter-1)=='('){
+                   throw std::runtime_error("Wrong expression: no expression between ( and )");
+                }
+                ++iter;
+                if(iter!=inputExpr.end() && isdigit(*iter)){
+                   infix.push_back("*");
+                }
+                break;
+            case '+':
+            	if(iter==inputExpr.begin()){
+            	   throw std::runtime_error("Wrong expression: lack of NUMBER in front of +");
+            	}
+            	
+            	else if((*(iter-1)=='+'||*(iter-1)=='-'|| *(iter-1)=='*')||*(iter-1)=='/'){
+            	   throw std::runtime_error("Wrong expression: lack of NUMBER between +-*/ and +");
+            	}
+            	else if(inputExpr.end()==(iter+1)){
+                   throw std::runtime_error("Wrong expression: lack of NUMBER after +");
+                }
+            	infix.push_back("+");
+            	++iter;
+            	break;
+            	
+            case '-':
+            	if(iter==inputExpr.begin()){
+            	   negative=true;
+            	   ++iter;
+            	   break;
+            	}
+                else if(iter!=inputExpr.begin() && ( '+'==*(iter-1) || '-'==*(iter-1)||
+            		'*'==*(iter-1) || '/'==*(iter-1) ) ){
+            	   negative=true;
+            	   infix.push_back("(");
+            	   numNegative++;
+            	   ++iter;
+            	   break;
+            	}
+                else if(iter==inputExpr.end()){
+                   throw std::runtime_error("Wrong expression: lack of NUMBER after -");
+                }
+                infix.push_back("-");
+                ++iter;
+                break;
+            case '*':
+            case '/':
+            	if(iter==inputExpr.begin()){
+            	   throw std::runtime_error("Wrong expression: lack of NUMBER in front of * or /");
+            	}
+            	
+            	else if((*(iter-1)=='+'||*(iter-1)=='-'|| *(iter-1)=='*')||*(iter-1)=='/'){
+            	   throw std::runtime_error("Wrong expression: lack of NUMBER between operator and */");
+            	}
+                else if(inputExpr.end()==(iter+1)){
+                   throw std::runtime_error("Wrong expression: lack of NUMBER after * or /");
+                }
+                else if('/'==*(iter) && '0'==*iter){
+                   throw std::runtime_error("Wrong expression: use 0 to divide");
+                }
+                infix.push_back(std::string(1,*iter));
+                ++iter;
+                break;
+            default://for number
+                num.clear();
+                std::string::iterator iterBegin=iter;
+                do{
+                    ++iter;
+                }while(isalnum(*iter));
+
+                if(negative){
+                        num.push_back('-');
+                }
+
+                num.insert(num.end(),iterBegin,iter); //no blank
+
+                infix.push_back(num);
+                
+                if(negative){
+                   negative=false;
+                   while((numNegative--)==0){
+                   	   infix.push_back(")");
+                   }
+                }
+            }
+    }
+
+
+    std::vector<std::string>::iterator iVec=infix.begin();
+    for(;iVec!=infix.end();iVec++)
+    {
+        std::cout<<*iVec<<" ";
+    }
+    std::cout<<std::endl;
 }
 
 void Evaluation::getPostfix()
