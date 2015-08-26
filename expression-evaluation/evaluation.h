@@ -2,6 +2,7 @@
 #include<stack>
 #include<string>
 #include<vector>
+#include<stdexcept>
 
 // for isalnum()
 #include<cctype>
@@ -13,9 +14,13 @@ class Evaluation{
   void calculate();
   
   //private:
+  typedef enum {lparen,rparen,plus,minus,times,divide,operand,internalUse} precendence;
+  static const int a=2;
   std::vector<std::string> expression;
   std::vector<std::string> postfix;
   
+  precendence getToken(char &symbol);
   void doEvaluation();
   void getPostfix();
+  void getInfix();
 };
