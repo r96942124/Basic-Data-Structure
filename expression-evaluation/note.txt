@@ -1,1 +1,13 @@
 四則運算
+
+1. turn expression std::string into infix std::vector<std::string>
+   check the following things
+   A. 1+2 2+3          ==> Error: blank between two numbers
+   B. 1++2 or 1+*2 ... ==> Error: two successive opeator
+   C. 1(2+3) ==> 1*(2+3)
+   D. (2+3)2 ==> (2+3)*2
+   E. 1--3   ==> 1-(-3) ; 1---3 ==> 1-(-(-3)) / 1-3
+   F. e+2    ==> not operand & operator 
+   G. (1+3 or 1+3) ==> lack right or left paren (google can handle it as their feature)      
+2. turn infix into postfix
+3. evaluate by postix

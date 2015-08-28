@@ -10,9 +10,76 @@ void Evaluation::calculate()
         std::string inputExpr;
         getline(std::cin,inputExpr);
   	getInfix(inputExpr);
-  	getPostfix();
-  	doEvaluation();
+  	//getPostfix();
+  	//doEvaluation();
+        postorderEval();
   }
+}
+
+void Evaluation::postorderEval()
+{
+    BinaryTree tree(buildTree(infix.begin()));
+    //tree.postEvaluation();
+    
+    //std::cout<<tree.root->data;
+    //std::cout<<tree.root->leftNode->data;
+    //std::cout<<tree.root->rightNode->data;
+    std::cout<<"inorder: ";
+    tree.inorder();
+    std::cout<<std::endl;
+    tree.postorder();
+    std::cout<<std::endl;
+}
+
+TreeNode* Evaluation::buildTree(std::vector<std::string>::iterator iBegin)
+{ 
+    TreeNode *leftNode;
+    TreeNode *root;
+
+    if(infix.end()==iBegin+1){
+       return new TreeNode(*iBegin);    
+    }
+    
+    leftNode=new TreeNode(*iBegin);
+    iBegin++;
+    root=new TreeNode(*iBegin); 
+    root->leftNode=leftNode;
+    iBegin++;
+    
+    if(infix.end()==iBegin+1){
+       root->rightNode=new TreeNode(*iBegin);
+    }
+    else if("("==*iBegin){
+       root->rightNode=buildTree(iBegin+1);
+    } 
+    else if("*"==*(iBegin+1) || "/"==*(iBegin+1)){
+       root->rightNode=buildTree(iBegin);
+    }
+    else if(")"==*(iBegin+1)){
+       root->rightNode=new TreeNode(*iBegin);
+       
+       iBegin++; // now is in ")"
+       if(infix.end()==iBegin+1)
+          return root;
+       
+       iBegin++; // now is in the "opeator" next to ")" 
+       leftNode=root; // creat new Tree
+       root=new TreeNode(*iBegin);
+       root->leftNode=leftNode;
+       iBegin++;
+       root->rightNode=buildTree(iBegin); 
+    }
+    else if("+"==*(iBegin+1) || "-"==*(iBegin+1)){
+       root->rightNode=new TreeNode(*iBegin);
+       
+       iBegin++; // now is in +-
+       leftNode=root;
+       root=new TreeNode(*iBegin);
+       root->leftNode=leftNode;
+       iBegin++;
+       root->rightNode=buildTree(iBegin);
+    }
+    return root;     
 }
 
 void Evaluation::getInfix(std::string &inputExpr)
@@ -26,7 +93,6 @@ void Evaluation::getInfix(std::string &inputExpr)
     int leftParen=0; 
     
     infix.clear(); 
-    std::cout<<"Expression: ";
  
     if(iter==inputExpr.end())
        throw std::runtime_error("no Expression");
@@ -34,6 +100,7 @@ void Evaluation::getInfix(std::string &inputExpr)
     while(iter!=inputExpr.end()){
         switch(*iter){
             case ' ': // to check" 3+4"
+
                 if(isdigit(*(iter+1)) && isdigit(*(iter-1))){ //ex. 2+3 4+5
                    throw std::runtime_error("there is a blank between numbers");
                 }
@@ -110,21 +177,19 @@ void Evaluation::getInfix(std::string &inputExpr)
                 showExpr+=*iter;
                 ++iter;
                 break;
-            default://for number
-                
+            default://for number                
+                num.clear();
                 if( ')'==*(iter-1) ){
                    infix.push_back("*");
                    showExpr+="*";
                 }
-                num.clear();
                 
                 std::string::iterator iterBegin=iter;
                 do{
                     ++iter;
                 }while(isdigit(*iter));
 
-                num.insert(num.end(),iterBegin,iter); //no blank
-        
+                num.insert(num.end(),iterBegin,iter); 
                 showExpr+=num;
                 
                 if(negative){
@@ -133,9 +198,7 @@ void Evaluation::getInfix(std::string &inputExpr)
                    }
                 }
 
-                
                 infix.push_back(num);
- 
                 if(negative){
                    negative=false;
                    while(numNegative--){
@@ -144,7 +207,8 @@ void Evaluation::getInfix(std::string &inputExpr)
                  }  
             }
     }
-
+   
+    std::cout<<"Expression: ";
     std::cout<<showExpr<<std::endl;
     std::vector<std::string>::iterator iVec=infix.begin();
     std::cout<<"infix: ";
@@ -225,14 +289,7 @@ Evaluation::precendence Evaluation::getToken(char &symbol)
 }
 
 void Evaluation::doEvaluation()
-{
-  //postfix.clear();
-  //postfix.push_back("2");
-  //postfix.push_back("3");
-  //postfix.push_back("4");
-  //postfix.push_back("*");
-  //postfix.push_back("+");
-  
+{  
   std::stack<int> numPostfix;
   int value,operandOne=0,operandTwo;
   std::vector<std::string>::iterator iterPostfix=postfix.begin();
