@@ -10,76 +10,9 @@ void Evaluation::calculate()
         std::string inputExpr;
         getline(std::cin,inputExpr);
   	getInfix(inputExpr);
-  	//getPostfix();
-  	//doEvaluation();
-        postorderEval();
+  	getPostfix();
+  	doEvaluation();
   }
-}
-
-void Evaluation::postorderEval()
-{
-    BinaryTree tree(buildTree(infix.begin()));
-    //tree.postEvaluation();
-    
-    //std::cout<<tree.root->data;
-    //std::cout<<tree.root->leftNode->data;
-    //std::cout<<tree.root->rightNode->data;
-    std::cout<<"inorder: ";
-    tree.inorder();
-    std::cout<<std::endl;
-    tree.postorder();
-    std::cout<<std::endl;
-}
-
-TreeNode* Evaluation::buildTree(std::vector<std::string>::iterator iBegin)
-{ 
-    TreeNode *leftNode;
-    TreeNode *root;
-
-    if(infix.end()==iBegin+1){
-       return new TreeNode(*iBegin);    
-    }
-    
-    leftNode=new TreeNode(*iBegin);
-    iBegin++;
-    root=new TreeNode(*iBegin); 
-    root->leftNode=leftNode;
-    iBegin++;
-    
-    if(infix.end()==iBegin+1){
-       root->rightNode=new TreeNode(*iBegin);
-    }
-    else if("("==*iBegin){
-       root->rightNode=buildTree(iBegin+1);
-    } 
-    else if("*"==*(iBegin+1) || "/"==*(iBegin+1)){
-       root->rightNode=buildTree(iBegin);
-    }
-    else if(")"==*(iBegin+1)){
-       root->rightNode=new TreeNode(*iBegin);
-       
-       iBegin++; // now is in ")"
-       if(infix.end()==iBegin+1)
-          return root;
-       
-       iBegin++; // now is in the "opeator" next to ")" 
-       leftNode=root; // creat new Tree
-       root=new TreeNode(*iBegin);
-       root->leftNode=leftNode;
-       iBegin++;
-       root->rightNode=buildTree(iBegin); 
-    }
-    else if("+"==*(iBegin+1) || "-"==*(iBegin+1)){
-       root->rightNode=new TreeNode(*iBegin);
-       
-       iBegin++; // now is in +-
-       leftNode=root;
-       root=new TreeNode(*iBegin);
-       root->leftNode=leftNode;
-       iBegin++;
-       root->rightNode=buildTree(iBegin);
-    }
-    return root;     
 }
 
 void Evaluation::getInfix(std::string &inputExpr)
