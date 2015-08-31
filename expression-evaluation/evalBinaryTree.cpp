@@ -5,16 +5,38 @@ void EvalBinaryTree::calculate()
   // 1. to get expression from string to vector<sting>&
   // 2. build tree
   // 3. evaluation by postorder
-  while(1){
+  infix.push_back("1");
+  infix.push_back("*");
+  infix.push_back("(");
+  infix.push_back("2");
+  infix.push_back("+");
+  infix.push_back("3");
+  infix.push_back(")");
+  infix.push_back("*");
+  infix.push_back("(");
+  infix.push_back("4");
+  infix.push_back("+");
+  infix.push_back("5");
+  infix.push_back(")");
+    std::vector<std::string>::iterator iVec=infix.begin();
+    std::cout<<"infix: ";
+    for(;iVec!=infix.end();iVec++)
+    {
+        std::cout<<*iVec<<" ";
+    }
+    std::cout<<std::endl; 
+  do{
         std::cout<<"Please"<<std::endl;
         std::string inputExpr;
-        // clear the data member of tree
+        //clear the data member of tree
         infix.clear();
         deleteTree();
         getline(std::cin,inputExpr);
         getInfix(inputExpr);
         postorderEval();
-  }
+        postorder();
+        std::cout<<std::endl;
+  }while(0);
 }
 
 void EvalBinaryTree::postorderEval(TreeNode* node)
@@ -36,10 +58,17 @@ void EvalBinaryTree::postorderEval(TreeNode* node)
 }
 
 TreeNode* EvalBinaryTree::buildTree(std::vector<std::string>::iterator iBegin)
-{
-    if(infix.end()==iBegin+1) return new TreeNode(*iBegin);
+{   
+    
+    while(iBegin!=infix.end() && "("==*iBegin){
+       iBegin++;
+    }
+    std::cout<<"Hi1: "<<*iBegin<<std::endl;
+    std::cout<<"Hi2: "<<*(iBegin+1)<<std::endl;
+    std::cout<<"Hi3: "<<*(iBegin+2)<<std::endl;
     TreeNode *leftNode=new TreeNode(*iBegin);
-    TreeNode *root=new TreeNode(*(iBegin+1));;
+    TreeNode *root=new TreeNode(*(iBegin+1));
+
 
     root->leftNode=leftNode;
     iBegin=iBegin+2;
@@ -51,23 +80,40 @@ TreeNode* EvalBinaryTree::buildTree(std::vector<std::string>::iterator iBegin)
        root->rightNode=buildTree(iBegin+1);
     }
     else if("*"==*(iBegin+1) || "/"==*(iBegin+1)){
-       root->rightNode=buildTree(iBegin);
+      if("("==*(iBegin+2)){
+          leftNode=root; // creat new Tree
+          root=new TreeNode(*(iBegin+1)); //"*"
+          root->leftNode=leftNode;
+          iBegin++;// "("
+           root->rightNode=buildTree(iBegin+1); //next to "("
+       } 
+       else 
+          root->rightNode=buildTree(iBegin);
     }
-    else if(")"==*(iBegin+1)){
+    else if(")"==*(iBegin+1) ){// || "+"==*(iBegin+1) || "-"==*(iBegin+1) ){
        root->rightNode=new TreeNode(*iBegin);
+       iBegin++; // now is ) + -
+       if(")"==*iBegin){
+          iBegin++; // now is in opeator next to ")"
+          if(infix.end()==iBegin) return root;
+       }
 
-       iBegin++; // now is in ")"
-       if(infix.end()==iBegin+1)
-          return root;
-
-       iBegin++; // now is in the "opeator" next to ")"
        leftNode=root; // creat new Tree
        root=new TreeNode(*iBegin);
        root->leftNode=leftNode;
        iBegin++;
-       root->rightNode=buildTree(iBegin);
+       if(infix.end()==iBegin+1) root->rightNode=new TreeNode(*iBegin);
+       else root->rightNode=buildTree(iBegin);
     }
     else if("+"==*(iBegin+1) || "-"==*(iBegin+1)){
+       if("("==*(iBegin+2)){
+          leftNode=root; // creat new Tree
+          root=new TreeNode(*(iBegin+1)); //"*"
+          root->leftNode=leftNode;
+          iBegin++;// "("
+           root->rightNode=buildTree(iBegin+1); //next to "("
+       }
+       else
        root->rightNode=new TreeNode(*iBegin);
 
        iBegin++; // now is in +-
@@ -75,7 +121,8 @@ TreeNode* EvalBinaryTree::buildTree(std::vector<std::string>::iterator iBegin)
        root=new TreeNode(*iBegin);
        root->leftNode=leftNode;
        iBegin++;
-       root->rightNode=buildTree(iBegin);
+       if(infix.end()==iBegin+1) root->rightNode=new TreeNode(*iBegin);
+       else root->rightNode=buildTree(iBegin);
     }
     return root;
 }
@@ -108,7 +155,7 @@ void EvalBinaryTree::getInfix(std::string &inputExpr)
                    break;
                 }
             case '(':
-                if(iter!=inputExpr.begin() && ( isdigit(*(iter-1)) || '('==*(iter-1) ) ){
+                if(iter!=inputExpr.begin() && ( isdigit(*(iter-1)) || ')'==*(iter-1) ) ){
                    infix.push_back("*");
                    showExpr+="*";
                 }
@@ -213,7 +260,7 @@ void EvalBinaryTree::getInfix(std::string &inputExpr)
     std::cout<<"infix: ";
     for(;iVec!=infix.end();iVec++)
     {
-        std::cout<<*iVec<<" ";
+        std::cout<<*iVec;//<<" ";
     }
     std::cout<<std::endl;
 }

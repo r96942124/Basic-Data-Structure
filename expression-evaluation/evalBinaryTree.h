@@ -43,4 +43,17 @@ class EvalBinaryTree{
 
   void deleteTree(){deleteTree(&root);}
   void deleteTree(TreeNode **node);
+  void postorder(){postorder(root);}
+  void postorder(TreeNode * currentNode);
 };
+
+
+void EvalBinaryTree::postorder(TreeNode * currentNode)
+{
+  if(currentNode!=NULL){
+    postorder(currentNode->leftNode);
+    postorder(currentNode->rightNode);
+    std::cout<<currentNode->data<<" ";
+    //postorderVec.push_back(currentNode->value);
+  }
+}

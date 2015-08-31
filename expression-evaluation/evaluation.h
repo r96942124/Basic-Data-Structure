@@ -14,7 +14,7 @@ class Evaluation{
   void calculate();
  
   private:
-  typedef enum {lparen,rparen,plus,minus,times,divide,operand,internalUse} precendence;
+  typedef enum {lparen,rparen,plus,minus,times,divide,operand,internalUse} precedence;
   static const int a=2;
   std::vector<std::string> expression;
   std::vector<std::string> infix;
@@ -23,7 +23,7 @@ class Evaluation{
   void getInfix(std::string &);
   
   // use postfix 
-  precendence getToken(char &symbol);
+  precedence getToken(char &symbol);
   void getPostfix();
   void doEvaluation();  
 };

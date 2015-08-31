@@ -42,7 +42,7 @@ void Evaluation::getInfix(std::string &inputExpr)
                    break;
                 }
             case '(':
-                if(iter!=inputExpr.begin() && ( isdigit(*(iter-1)) || '('==*(iter-1) ) ){
+                if(iter!=inputExpr.begin() && ( isdigit(*(iter-1)) || ')'==*(iter-1) ) ){
                    infix.push_back("*");
                    showExpr+="*";
                 }
@@ -206,7 +206,7 @@ void Evaluation::getPostfix()
   std::cout<<std::endl;
 }
 
-Evaluation::precendence Evaluation::getToken(char &symbol)
+Evaluation::precedence Evaluation::getToken(char &symbol)
 {
   switch(symbol){
     case '(': return lparen;
