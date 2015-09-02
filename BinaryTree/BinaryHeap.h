@@ -1,5 +1,5 @@
 /*
-Use array to implement binary heap
+Use array to implement min binary heap
 */
 #include<iostream>
 
