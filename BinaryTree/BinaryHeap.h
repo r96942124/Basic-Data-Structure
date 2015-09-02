@@ -2,19 +2,21 @@
 Use array to implement min binary heap
 */
 #include<iostream>
+#include<vector>
 
 class BinaryHeap{
-  publice:
+  public:
     void Create(std::vector<int> & input);
     void insert(int key);
-    int deleteMin();
+    int deleteMinA();
+    int deleteMinB();
     int search(int key);
-    void delete(int key);
+    void deleteData(int key);
     void print(){ 
-        for(int i=0;i<n;i++){std::cout<<data[i]<<" ";}
+        for(int i=0;i<data.size();i++){ std::cout<<data.at(i)<<" "; }
         std::cout<<std::endl;
     }
-  private:
+  //private:
     int n;
     std::vector<int> data;
     void creatTopDown();

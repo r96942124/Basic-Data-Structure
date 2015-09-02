@@ -1,17 +1,57 @@
-#include<BinaryHeap.h>
+#include"BinaryHeap.h"
 
 /*void BinaryHeap::insert(int key){
   
 }*/
 
-/*int BinaryHeap::deleteMin(int key){
+int BinaryHeap::deleteMinA(){
+  if(data.empty()) throw std::runtime_error("empty Heap");
+  int min=data.at(0);
+  int lastValue=*(data.end()-1);
+  data.erase(data.end()-1);
+  int index=1,nextIndex=2;
   
-}*/
+  while(nextIndex < data.size()){
+    if(data.at(nextIndex-1) > data.at(nextIndex) ) nextIndex++;
+    if(lastValue < data.at(nextIndex-1) ){
+       data.at(index-1)=lastValue;
+       break;
+    }
+    data.at(index-1)=data.at(nextIndex-1);
+    index=nextIndex;
+    nextIndex=2*index;
+  }
+  data.at(index-1)=lastValue; 
+  return min;
+}
 
-/*void BinaryHeap::delete(int key){
+int BinaryHeap::deleteMinB(){
+  if(data.empty()) throw std::runtime_error("empty Heap");
+  int min=data.at(0);
+  data.at(0)=*(data.end()-1);
+  data.erase(data.end()-1);
+  int index=1,nextIndex=2;
+
+  while(nextIndex < data.size()){
+    if(data.at(nextIndex-1) > data.at(nextIndex) ) {
+       nextIndex++;
+    }
+    if(data.at(index-1) < data.at(nextIndex-1) ){
+       break;
+    }
+    int temp=data.at(index-1);
+    data.at(index-1)=data.at(nextIndex-1);
+    data.at(nextIndex-1)=temp;
+    index=nextIndex;
+    nextIndex=2*index;
+  }
+  return min;
+}
+
+void BinaryHeap::deleteData(int key){
   int index=search(key);
-  if(!index){
-      data.at(index-1)=*(data.end()-1)
+  if(index){
+      data.at(index-1)=*(data.end()-1);
       data.erase(data.end()-1);
       if(index/2 && data.at(index-1) < data.at(index/2-1) ){
         int curIndex=index, parentIndex=index/2;
@@ -19,9 +59,9 @@
           int temp=data.at(curIndex-1);
           data.at(curIndex-1)=data.at(parentIndex-1);
           data.at(parentIndex-1)=temp;
-          curIndx=parentIndex;
+          curIndex=parentIndex;
           parentIndex=curIndex/2;
-        }while(parIndex && data.at(curIndex-1) < data.at(parentIndex-1));
+        }while(parentIndex && data.at(curIndex-1) < data.at(parentIndex-1));
       }
       else if(index*2 < data.size()){ 
         int curIndex=index, childIndex=index*2;
@@ -33,7 +73,7 @@
           int temp=data.at(curIndex-1);
           data.at(curIndex-1)=data.at(childIndex-1);
           data.at(childIndex-1)=temp;
-          curIndx=childIndex;
+          curIndex=childIndex;
           childIndex=curIndex*2;
         }while(childIndex<data.size());
       }
@@ -41,7 +81,7 @@
   else{
     std::cout<<"Don't find key="<<key<<std::endl;
   }
-}*/
+}
 
 int BinaryHeap::search(int key){
   int i=0;
@@ -54,5 +94,27 @@ int BinaryHeap::search(int key){
 
 
 int main(){
-  
+  BinaryHeap test;
+  test.data.push_back(1);
+  test.data.push_back(3);
+  test.data.push_back(5);
+  test.data.push_back(7);
+  test.data.push_back(8);
+  test.data.push_back(9);
+  test.data.push_back(10); 
+  test.print();
+  test.deleteData(1);
+  test.print();
+  test.deleteData(3);
+  test.print();
+  test.deleteData(5);  
+  test.print();
+  test.deleteData(7);
+  test.print();
+  test.deleteData(8); 
+  test.print();
+  test.deleteData(9);
+  test.print();
+  test.deleteData(10);
+  test.print(); 
 }
