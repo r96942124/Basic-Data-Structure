@@ -5,8 +5,9 @@ Use array to implement min binary heap
 
 class BinaryHeap{
   publice:
-    void Create(std::vector & input);
+    void Create(std::vector<int> & input);
     void insert(int key);
+    int deleteMin();
     int search(int key);
     void delete(int key);
     void print(){ 
