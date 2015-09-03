@@ -21,4 +21,5 @@ class BinaryHeap{
     std::vector<int> data;
     void creatTopDown(std::vector<int> & input);
     void creatBottomUp();
+    void heapify(int key);
 };

@@ -1,8 +1,25 @@
 #include"BinaryHeap.h"
 
 void BinaryHeap::creatBottomUp()
-{
-  
+{ 
+     for(int i=data.size();i!=0;i--){
+         heapify(i);
+     }        
+}
+
+void BinaryHeap::heapify(int index){
+     if(index*2 > data.size() ) return;
+     
+     int childIndex=index*2;
+
+     if( childIndex < data.size() && data.at(childIndex-1) > data.at(childIndex)  ) childIndex++;
+     
+     if( data.at(childIndex-1) < data.at(index-1) ){
+         int temp=data.at(childIndex-1);
+         data.at(childIndex-1)=data.at(index-1);
+         data.at(index-1)=temp;
+         heapify(childIndex);
+     }
 }
 
 void BinaryHeap::creatTopDown(std::vector<int> & input) 
@@ -125,23 +142,25 @@ int BinaryHeap::search(int key){
 
 int main(){
   BinaryHeap test;
-  /*test.data.push_back(1);
-  test.data.push_back(5);
-  test.data.push_back(3);
-  test.data.push_back(9);
-  test.data.push_back(10);
-  test.data.push_back(7);
-  test.data.push_back(4); 
-  
+  std::vector<int> itestdata;
+  itestdata.push_back(6);
+  itestdata.push_back(3);
+  itestdata.push_back(1);
+  itestdata.push_back(2);
+  itestdata.push_back(10);
+  itestdata.push_back(7);
+  itestdata.push_back(9); 
+  /*
   test.data.push_back(4);
   test.data.push_back(5);
   test.data.push_back(7);
   test.data.push_back(9);
   test.data.push_back(10);
   */
+  //test.print();
+  test.creatTopDown(itestdata);  
   test.print();
-  test.insert(5);  
-  test.print();
+  /*
   test.insert(1);
   test.print();
   test.insert(9);  
@@ -153,6 +172,6 @@ int main(){
   test.insert(10);
   test.print();
   test.insert(7);
-  test.print(); 
+  test.print();*/
 
 }
