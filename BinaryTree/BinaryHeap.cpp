@@ -1,8 +1,30 @@
 #include"BinaryHeap.h"
 
-/*void BinaryHeap::insert(int key){
+void BinaryHeap::creatBottomUp()
+{
   
-}*/
+}
+
+void BinaryHeap::creatTopDown(std::vector<int> & input) 
+{
+  for(int i=0;i<input.size();i++){
+      insert(input.at(i));
+  } 
+}
+
+void BinaryHeap::insert(int key){
+  data.push_back(key);
+  
+  int curIndex=data.size(), parentIndex=curIndex/2;
+   
+  while(parentIndex && data.at(curIndex-1) < data.at(parentIndex-1)){
+     int temp=data.at(curIndex-1);
+     data.at(curIndex-1)=data.at(parentIndex-1);
+     data.at(parentIndex-1)=temp;
+     curIndex=parentIndex;
+     parentIndex=curIndex/2;
+   }
+}
 
 int BinaryHeap::deleteMinA(){
   if(data.empty()) throw std::runtime_error("empty Heap");
@@ -61,6 +83,7 @@ void BinaryHeap::deleteData(int key){
 
       if(index/2 && data.at(index-1) < data.at(index/2-1) ){
         int curIndex=index, parentIndex=index/2;
+        
         do{
           int temp=data.at(curIndex-1);
           data.at(curIndex-1)=data.at(parentIndex-1);
@@ -71,10 +94,11 @@ void BinaryHeap::deleteData(int key){
       }
       else{ 
         int curIndex=index, childIndex=index*2;
+        
         while(childIndex <= data.size()){
           if(childIndex < data.size() && data.at(childIndex-1) > data.at(childIndex)) childIndex++;
           if(data.at(childIndex-1) > data.at(curIndex-1) ){ 
-            return;
+             break;
           }
           int temp=data.at(curIndex-1);
           data.at(curIndex-1)=data.at(childIndex-1);
@@ -101,14 +125,14 @@ int BinaryHeap::search(int key){
 
 int main(){
   BinaryHeap test;
-  test.data.push_back(1);
+  /*test.data.push_back(1);
   test.data.push_back(5);
   test.data.push_back(3);
   test.data.push_back(9);
   test.data.push_back(10);
   test.data.push_back(7);
   test.data.push_back(4); 
-  /*
+  
   test.data.push_back(4);
   test.data.push_back(5);
   test.data.push_back(7);
@@ -116,19 +140,19 @@ int main(){
   test.data.push_back(10);
   */
   test.print();
-  test.deleteData(5);  
+  test.insert(5);  
   test.print();
-  test.deleteData(1);
+  test.insert(1);
   test.print();
-  test.deleteData(9);  
+  test.insert(9);  
   test.print();
-  test.deleteData(4);
+  test.insert(4);
   test.print();
-  test.deleteData(3); 
+  test.insert(3); 
   test.print();
-  test.deleteData(10);
+  test.insert(10);
   test.print();
-  test.deleteData(7);
+  test.insert(7);
   test.print(); 
 
 }

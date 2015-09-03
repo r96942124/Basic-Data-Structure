@@ -6,7 +6,7 @@ Use array to implement min binary heap
 
 class BinaryHeap{
   public:
-    void Create(std::vector<int> & input);
+    void Create();
     void insert(int key);
     int deleteMinA();
     int deleteMinB();
@@ -19,6 +19,6 @@ class BinaryHeap{
   //private:
     int n;
     std::vector<int> data;
-    void creatTopDown();
+    void creatTopDown(std::vector<int> & input);
     void creatBottomUp();
 };
