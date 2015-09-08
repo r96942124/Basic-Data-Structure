@@ -142,36 +142,5 @@ int BinaryHeap::search(int key){
 
 int main(){
   BinaryHeap test;
-  std::vector<int> itestdata;
-  itestdata.push_back(6);
-  itestdata.push_back(3);
-  itestdata.push_back(1);
-  itestdata.push_back(2);
-  itestdata.push_back(10);
-  itestdata.push_back(7);
-  itestdata.push_back(9); 
-  /*
-  test.data.push_back(4);
-  test.data.push_back(5);
-  test.data.push_back(7);
-  test.data.push_back(9);
-  test.data.push_back(10);
-  */
-  //test.print();
-  test.creatTopDown(itestdata);  
-  test.print();
-  /*
-  test.insert(1);
-  test.print();
-  test.insert(9);  
-  test.print();
-  test.insert(4);
-  test.print();
-  test.insert(3); 
-  test.print();
-  test.insert(10);
-  test.print();
-  test.insert(7);
-  test.print();*/
-
 }
+
