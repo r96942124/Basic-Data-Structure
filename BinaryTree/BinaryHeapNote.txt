@@ -1,6 +1,0 @@
-
-    // continously insert
-    void creatTopDown(std::vector<int> & input);
-    // do heapify from last node to the first node
-    void creatBottomUp();
-    void heapify(int key);
