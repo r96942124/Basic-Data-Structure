@@ -8,4 +8,5 @@ class graph{
     virtual void deleteEdge(char &vertexOne,char &verTexTwo) = 0;
     virtual boolean isEmpty() = 0;
     virtual void listAdjacent(char & vertex) = 0;
+    virtual void printMatrix()=0;
 };
