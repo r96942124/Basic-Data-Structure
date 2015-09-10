@@ -5,5 +5,7 @@ class matrixGraph: public graph{
       ;
   private:
   std::map<int,int> indexMap;
+  std::stack<int> indexUnused;
+  int indexTop;
   std::vector<std::vector<int>> matrix;
 };
