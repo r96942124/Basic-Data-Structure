@@ -1,6 +1,6 @@
 #include"matrixGraph.h"
 
-void matrixGraph::addVertex(char vertex)
+void matrixGraph::addVertex(char &vertex)
 {
   int index;
   if (indexMap.end()==indexMap.find(vertex)){
@@ -19,9 +19,28 @@ void matrixGraph::addVertex(char vertex)
   }
 }
 
+// O(logN+N)
+virtual void addEdge(char &vertexOne, char &vertexTwo){
+  std:::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
+  std:::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
+  if (verPairOne!=indexMap.end() && verPairTwo!=indexMap.end()){
+    int indexOne=verPairOne->second;
+    int indexTwo=verPairTwo->second;
+    matrix.at(indexOne).resize(matrix.size());
+    matrix.at(indexTwo).resize(matrix.size());
+    matrix.at(indexOne).at(indexTwo)=1;
+    matrix.at(indexTwo).at(indexOne)=1;
+  }
+}
+
+// O(logN)
 void matrixGraph::deleteEdge(char &vertexOne,char &vertexTwo){
-  matrix.at(vertexOne).at(vertexTwo)=0;
-  matrix.at(vertexTwo).at(vertexOne)=0;
+  std:::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
+  std:::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
+  int indexOne=verPairOne->second;
+  int indexTwo=verPairTwo->second;
+  matrix.at(indexOne).at(indexTwo)=1;
+  matrix.at(indexTwo).at(indexOne)=1;
 }
 
 void matrixGraph::deleteVertex(char &vertex)
