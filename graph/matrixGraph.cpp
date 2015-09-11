@@ -1,9 +1,9 @@
 #include"matrixGraph.h"
 
+// O(logN)
 void matrixGraph::addVertex(char &vertex)
 {
   int index;
-  \\O(logN)
   if (indexMap.end()==indexMap.find(vertex)){
      if (!indexUnused.empty()){
        index=indexUnused.top();
@@ -71,6 +71,7 @@ void matrixGraph::deleteEdge(int indexOne, int indexTwo){
   }
 }
 
+//O(N)
 void matrixGraph::deleteVertex(char &vertex)
 {
   std:::map<char,int>::iterator verPair=indexMap.find(vertex);
@@ -78,21 +79,14 @@ void matrixGraph::deleteVertex(char &vertex)
     std::cout<<"No such vertex"<<std::endl;
   }
   else{
-    int verIndex=verPair->second;
     indexMap.erase(verPair);
     clearEdge(verIndex);
-    if ((verIndex+1)==indexTop){
-      indexTop=verIndex;
-      vertexName.erase(vertexName.end()-1);
-      matrix.erase(matrix.end()-1);
-    }
-    else{
-      vertexName.at(verIndex)='\0';
-      indexUnused.push(verIndex);
-    }
+    vertexName.at(verIndex)='\0';
+    indexUnused.push(verIndex);
   }
 }
 
+// O(N)
 void matrixGraph::deleteVertex(int index){
    if (index < matrixSize ){
        clearEdge(index);
@@ -102,9 +96,29 @@ void matrixGraph::deleteVertex(int index){
   } 
 }
 
+// O(N)
 void matrixGraph::clearEdge(int index){
   for (int i=0;i<matrixSize;i++){
     matrix.at(index).at(i)=0;
     matrix.at(i).at(index)=0;
   }
 }
+
+// O(logN)
+bool searchEdge(char &vertexOne,char &vertexTwo){
+  std:::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
+  std:::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
+  searchEdge(verPairOne->second,verPairTwo->second);
+}
+
+//O(1)
+bool searchEdge(int indexOne,int indexTwo){
+  if (indexOne < matrixSize && indexTwo < matrixSize ){
+   return matrix.at(indexOne).at(indexTwo);
+  }
+  else{
+   return 0;
+  }
+}
+ 
+ 
