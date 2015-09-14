@@ -19,7 +19,7 @@ void matrixGraph::addVertex(char &vertex)
        }
      }
      vertexName.at(index)=vertex;
-     map[vertex]=index;
+     indexMap[vertex]=index;
      std::cout<<"Add Vertex: "<<vertex<<std::endl;
   }
   else{
@@ -29,8 +29,8 @@ void matrixGraph::addVertex(char &vertex)
 
 //O(logN)
 void matrixGraph::addEdge(char &vertexOne, char &vertexTwo){
-  std:::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
-  std:::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
+  std::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
+  std::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
   if (verPairOne!=indexMap.end() && verPairTwo!=indexMap.end()){
     int indexOne=verPairOne->second;
     int indexTwo=verPairTwo->second;
@@ -52,8 +52,8 @@ void matrixGraph::addEdge(int indexOne, int indexTwo){
 
 // O(logN)
 void matrixGraph::deleteEdge(char &vertexOne,char &vertexTwo){
-  std:::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
-  std:::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
+  std::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
+  std::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
   int indexOne=verPairOne->second;
   int indexTwo=verPairTwo->second;
   matrix.at(indexOne).at(indexTwo)=0;
@@ -74,15 +74,15 @@ void matrixGraph::deleteEdge(int indexOne, int indexTwo){
 //O(N)
 void matrixGraph::deleteVertex(char &vertex)
 {
-  std:::map<char,int>::iterator verPair=indexMap.find(vertex);
+  std::map<char,int>::iterator verPair=indexMap.find(vertex);
   if (indexMap.end()==verPair){
     std::cout<<"No such vertex"<<std::endl;
   }
   else{
     indexMap.erase(verPair);
-    clearEdge(verIndex);
-    vertexName.at(verIndex)='\0';
-    indexUnused.push(verIndex);
+    clearEdge(verPair->second);
+    vertexName.at(verPair->second)='\0';
+    indexUnused.push(verPair->second);
   }
 }
 
@@ -106,8 +106,8 @@ void matrixGraph::clearEdge(int index){
 
 // O(logN)
 bool matrixGraph::searchEdge(char &vertexOne,char &vertexTwo){
-  std:::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
-  std:::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
+  std::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
+  std::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
   searchEdge(verPairOne->second,verPairTwo->second);
 }
 
@@ -121,4 +121,7 @@ bool matrixGraph::searchEdge(int indexOne,int indexTwo){
   }
 }
 
-
+int main()
+{
+    return 0;
+}
