@@ -5,9 +5,8 @@ void matrixGraph::addVertex(char &vertex)
 {
   int index;
   if (indexMap.end()==indexMap.find(vertex)){
-     if (!indexUnused.empty()){
-       index=indexUnused.top();
-       indexUnused.pop();
+     if (!indexUnused.ifEmpty()){
+       index=indexUnused.topPop();
      }
      else{
        if (indexTop==matrixSize){
@@ -79,16 +78,21 @@ void matrixGraph::deleteVertex(char &vertex)
     std::cout<<"No such vertex"<<std::endl;
   }
   else{
-    indexMap.erase(verPair);
     clearEdge(verPair->second);
     vertexName.at(verPair->second)='\0';
-    indexUnused.push(verPair->second);
+    indexUnused.pushIndex(verPair->second);
+    indexMap.erase(verPair);
+    
+    if(matrixSize==indexUnused.getSize()){
+       indexUnused.resetStack();
+       indexTop=-1;
+    }
   }
 }
 
 // O(N)
 void matrixGraph::deleteVertex(int index){
-   if (index < matrixSize ){
+  if (index < matrixSize ){
        clearEdge(index);
   }
   else{
@@ -119,6 +123,10 @@ bool matrixGraph::searchEdge(int indexOne,int indexTwo){
   else{
    return 0;
   }
+}
+
+bool matrixGraph::isEmpty(){
+  return -1==indexTop;
 }
 
 int main()
