@@ -93,7 +93,7 @@ void matrixGraph::deleteVertex(int index){
   }
   else{
     std::cout<<"out of matrix size range"<<std::endl;
-  } 
+  }
 }
 
 // O(N)
@@ -105,14 +105,14 @@ void matrixGraph::clearEdge(int index){
 }
 
 // O(logN)
-bool searchEdge(char &vertexOne,char &vertexTwo){
+bool matrixGraph::searchEdge(char &vertexOne,char &vertexTwo){
   std:::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
   std:::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
   searchEdge(verPairOne->second,verPairTwo->second);
 }
 
 //O(1)
-bool searchEdge(int indexOne,int indexTwo){
+bool matrixGraph::searchEdge(int indexOne,int indexTwo){
   if (indexOne < matrixSize && indexTwo < matrixSize ){
    return matrix.at(indexOne).at(indexTwo);
   }
@@ -120,5 +120,5 @@ bool searchEdge(int indexOne,int indexTwo){
    return 0;
   }
 }
- 
- 
+
+
