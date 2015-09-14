@@ -7,7 +7,7 @@
 
 class matrixGraph: public graph{
   public:
-    matrixGraph():vertexName(std::string(10,'\0')),indexTop(0),matrix(std::vector<  std::vector<bool> >(matrixSize,std::vector<bool>(matrixSize))){}
+    matrixGraph():vertexName(std::string(10,'\0')),indexTop(-1),matrix(std::vector<  std::vector<bool> >(matrixSize,std::vector<bool>(matrixSize))){}
     void addVertex(char &vertex);
     void addEdge(char &vertexOne, char &vertexTwo);
     void deleteVertex(char &vertex);
@@ -23,13 +23,25 @@ class matrixGraph: public graph{
     //void listAdjacent(int index);
 
     void clearEdge(int index);
-    //bool isEmpty();
+    bool isEmpty();
     //void printMatrix();
   private:
     const static int matrixSize=10;
     std::string vertexName;
     std::map<char,int> indexMap;
-    std::stack<int> indexUnused;
     int indexTop;
     std::vector< std::vector<bool> > matrix;
+    
+    class stackInt{
+        public:
+          stackInt():index(-1){}
+          void pushIndex(int key){ array[++index]=key;}
+          int topPop(){return array[index--];}
+          void resetStack(){index=-1;}
+          void getSize(){return index+1;}
+          void ifEmpty(){return -1==index;}
+        private:
+          int array[matrixSize];
+          int index;
+    } indexUnused;
 };
