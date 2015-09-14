@@ -1,7 +1,7 @@
 #include"matrixGraph.h"
 
 // O(logN)
-void matrixGraph::addVertex(char &vertex)
+void matrixGraph::addVertex(const char &vertex)
 {
   int index;
   if (indexMap.end()==indexMap.find(vertex)){
@@ -9,12 +9,12 @@ void matrixGraph::addVertex(char &vertex)
        index=indexUnused.topPop();
      }
      else{
-       if (indexTop==matrixSize){
+       if (indexTop+1==matrixSize){
          std::cout<<"out of matrix size range"<<std::endl;
          return;
        }
        else{
-         index=indexTop++;
+         index=++indexTop;
        }
      }
      vertexName.at(index)=vertex;
@@ -27,7 +27,7 @@ void matrixGraph::addVertex(char &vertex)
 }
 
 //O(logN)
-void matrixGraph::addEdge(char &vertexOne, char &vertexTwo){
+void matrixGraph::addEdge(const char &vertexOne,const char &vertexTwo){
   std::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
   std::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
   if (verPairOne!=indexMap.end() && verPairTwo!=indexMap.end()){
@@ -40,7 +40,7 @@ void matrixGraph::addEdge(char &vertexOne, char &vertexTwo){
 
 //O(1)
 void matrixGraph::addEdge(int indexOne, int indexTwo){
-  if (indexOne < matrixSize && indexTwo < matrixSize ){
+  if (indexOne-- < matrixSize && indexTwo-- < matrixSize ){
     matrix.at(indexOne).at(indexTwo)=1;
     matrix.at(indexTwo).at(indexOne)=1;
   }
@@ -50,7 +50,7 @@ void matrixGraph::addEdge(int indexOne, int indexTwo){
 }
 
 // O(logN)
-void matrixGraph::deleteEdge(char &vertexOne,char &vertexTwo){
+void matrixGraph::deleteEdge(const char &vertexOne,const char &vertexTwo){
   std::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
   std::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
   int indexOne=verPairOne->second;
@@ -61,7 +61,7 @@ void matrixGraph::deleteEdge(char &vertexOne,char &vertexTwo){
 
 //O(1)
 void matrixGraph::deleteEdge(int indexOne, int indexTwo){
-  if (indexOne < matrixSize && indexTwo < matrixSize ){
+  if (indexOne-- < matrixSize && indexTwo-- < matrixSize ){
     matrix.at(indexOne).at(indexTwo)=0;
     matrix.at(indexTwo).at(indexOne)=0;
   }
@@ -71,7 +71,7 @@ void matrixGraph::deleteEdge(int indexOne, int indexTwo){
 }
 
 //O(N)
-void matrixGraph::deleteVertex(char &vertex)
+void matrixGraph::deleteVertex(const char &vertex)
 {
   std::map<char,int>::iterator verPair=indexMap.find(vertex);
   if (indexMap.end()==verPair){
@@ -83,9 +83,9 @@ void matrixGraph::deleteVertex(char &vertex)
     indexUnused.pushIndex(verPair->second);
     indexMap.erase(verPair);
     
-    if(matrixSize==indexUnused.getSize()){
-       indexUnused.resetStack();
-       indexTop=-1;
+    if (indexTop-1==indexUnused.getSize()){
+      indexUnused.resetStack();
+      indexTop=-1;
     }
   }
 }
@@ -93,7 +93,9 @@ void matrixGraph::deleteVertex(char &vertex)
 // O(N)
 void matrixGraph::deleteVertex(int index){
   if (index < matrixSize ){
-       clearEdge(index);
+    --index;
+    char vertex=vertexName.at(index);
+    deleteVertex(vertex);
   }
   else{
     std::cout<<"out of matrix size range"<<std::endl;
@@ -109,16 +111,17 @@ void matrixGraph::clearEdge(int index){
 }
 
 // O(logN)
-bool matrixGraph::searchEdge(char &vertexOne,char &vertexTwo){
+bool matrixGraph::searchEdge(const char &vertexOne,const char &vertexTwo){
   std::map<char,int>::iterator verPairOne=indexMap.find(vertexOne);
   std::map<char,int>::iterator verPairTwo=indexMap.find(vertexTwo);
-  searchEdge(verPairOne->second,verPairTwo->second);
+  return searchEdge(verPairOne->second,verPairTwo->second);
 }
+
 
 //O(1)
 bool matrixGraph::searchEdge(int indexOne,int indexTwo){
   if (indexOne < matrixSize && indexTwo < matrixSize ){
-   return matrix.at(indexOne).at(indexTwo);
+   return matrix.at(indexOne-1).at(indexTwo-1);
   }
   else{
    return 0;
@@ -129,7 +132,38 @@ bool matrixGraph::isEmpty(){
   return -1==indexTop;
 }
 
+void matrixGraph::printMatrix(){
+  std::cout<<" ";
+  for (int i=0;i<matrixSize;i++){
+     if (vertexName.at(i)!='\0'){
+       std::cout<<" "<<vertexName.at(i);
+     }
+  }
+  std::cout<<std::endl;
+
+  for (int i=0;i<matrixSize;i++){
+     if (vertexName.at(i)!='\0'){
+       std::cout<<vertexName.at(i)<<" ";
+       for (int j=0;j<matrixSize;j++){
+          if (vertexName.at(j)!='\0'){
+            std::cout<<matrix.at(i).at(j)<<" ";
+          }
+       }
+       std::cout<<std::endl;
+     }
+  }
+
+}
+
 int main()
 {
-    return 0;
+  matrixGraph test;
+  test.addVertex('a');
+  test.printMatrix();
+  test.addVertex('b');
+  test.printMatrix();
+  test.addVertex('c');
+  test.printMatrix();
+  test.addVertex('d');
+  test.printMatrix();
 }

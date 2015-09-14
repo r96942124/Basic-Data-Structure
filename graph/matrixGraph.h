@@ -1,4 +1,5 @@
 #include"graph.h"
+#include<iostream>
 #include<deque>
 #include<map>
 #include<stack>
@@ -8,11 +9,11 @@
 class matrixGraph: public graph{
   public:
     matrixGraph():vertexName(std::string(10,'\0')),indexTop(-1),matrix(std::vector<  std::vector<bool> >(matrixSize,std::vector<bool>(matrixSize))){}
-    void addVertex(char &vertex);
-    void addEdge(char &vertexOne, char &vertexTwo);
-    void deleteVertex(char &vertex);
-    void deleteEdge(char &vertexOne,char &vertexTwo);
-    bool searchEdge(char &vertexOne,char &vertexTwo);
+    void addVertex(const char &vertex);
+    void addEdge(const char &vertexOne,const char &vertexTwo);
+    void deleteVertex(const char &vertex);
+    void deleteEdge(const char &vertexOne,const char &vertexTwo);
+    bool searchEdge(const char &vertexOne,const char &vertexTwo);
     //void listAdjacent(char & vertex);
 
     //void addVertex(int index);
@@ -24,7 +25,7 @@ class matrixGraph: public graph{
 
     void clearEdge(int index);
     bool isEmpty();
-    //void printMatrix();
+    void printMatrix();
   private:
     const static int matrixSize=10;
     std::string vertexName;
@@ -38,8 +39,8 @@ class matrixGraph: public graph{
           void pushIndex(int key){ array[++index]=key;}
           int topPop(){return array[index--];}
           void resetStack(){index=-1;}
-          void getSize(){return index+1;}
-          void ifEmpty(){return -1==index;}
+          int getSize(){return index+1;}
+          bool ifEmpty(){return -1==index;}
         private:
           int array[matrixSize];
           int index;
