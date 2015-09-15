@@ -36,13 +36,21 @@ void matrixGraph::addEdge(const char &vertexOne,const char &vertexTwo){
     matrix.at(indexOne).at(indexTwo)=1;
     matrix.at(indexTwo).at(indexOne)=1;
   }
+  else{
+    std::cout<<"No such Node"<<std::endl;
+  }
 }
 
 //O(1)
 void matrixGraph::addEdge(int indexOne, int indexTwo){
   if (indexOne-- < matrixSize && indexTwo-- < matrixSize ){
-    matrix.at(indexOne).at(indexTwo)=1;
-    matrix.at(indexTwo).at(indexOne)=1;
+    if ('\0'!=vertexName.at(indexOne) && '\0'!=vertexName.at(indexTwo)){
+      matrix.at(indexOne).at(indexTwo)=1;
+      matrix.at(indexTwo).at(indexOne)=1;
+    }
+    else{
+      std::cout<<"No such Vertex"<<std::endl;
+    }
   }
   else{
     std::cout<<"out of matrix size range"<<std::endl;
