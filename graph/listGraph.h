@@ -10,11 +10,11 @@ class listGraph: public graph{
   public:
     listGraph():{}
 
-    void addVertex(int index);
-    int deleteVertex(int index);
+    int addVertex(std::string name);
+    //void deleteVertex(int index);
     
     void addEdge(int indexOne, int indexTwo,int weight);
-    void deleteEdge(int indexOne,int indexTwo);
+    bool deleteEdge(int indexOne,int indexTwo);
     
     bool searchEdge(int indexOne,int indexTwo);
     void listAdjacent(int index);
@@ -22,10 +22,11 @@ class listGraph: public graph{
     void clearEdge(int index);
     bool isEmpty();
     void printMatrix();
-    void printMatrix(std::string vertexName);
   private:
     typedef struct{
+      Node(int index,int weight,Node* nextNode):index(index),weight(weight),nextNode(nextNode);
       int index;
+      int weight;
       Node* nextNode;
     } Node;
     std::vector<Node*> nodeList;
