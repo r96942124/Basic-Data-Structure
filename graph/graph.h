@@ -4,7 +4,7 @@ class graph{
   public:
     graph():{}
     virtual void addVertex(int index) = 0;
-    //virtual char deleteVertex(int index) = 0;
+    virtual int deleteVertex(int index) = 0;
     
     void addEdge(int indexOne, int indexTwo){addEdge(indexOne,indexTwo,1);}
     virtual void addEdge(int indexOne, int indexTwo, int weight) = 0;
