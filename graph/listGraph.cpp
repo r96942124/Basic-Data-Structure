@@ -1,5 +1,28 @@
 #include<listGraph.h>
 
+void addEdge(int indexOne, int indexTwo,int weight){
+  Node *currentNode=nodeList.at(indexOne);
+  Node *newNode=new Node(indexTwo,weight,currentNode->nextNode);
+  currentNode->nextNode=newNode;
+}
+
+bool listGraph::deleteEdge(int indexOne,int indexTwo){
+  Node* currentNode=nodeList.at(indexOne)->nextNode;
+  Node* preNode=nodeList.at(indexOne);
+  Node* nextNode;
+  while (currentNode){
+       if(currentNode->index==indexTwo){
+          //protection
+          nextNode=currentNode->nextNode;
+          delete currentNode;
+          preNode->nextNode=nextNode;
+          return true;
+       }
+       preNode=currentNode;
+       currentNode=currentNode->nextNode;
+  }
+  return false;
+}
 
 bool listGraph::searchEdge(int indexOne,int indexTwo){
   Node* currentNode=nodeList.at(index)->nextNode;
