@@ -28,5 +28,5 @@ class listGraph: public graph{
       int index;
       Node* nextNode;
     } Node;
-    std::vector<Node*> 
+    std::vector<Node*> nodeList;
 };
