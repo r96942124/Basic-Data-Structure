@@ -1,6 +1,13 @@
 #include<listGraph.h>
 
-void addEdge(int indexOne, int indexTwo,int weight){
+int addVertex(std::string name){
+  Node *newNode=new Node(indexTwo,0,NULL);
+  nodeList.push_back(newNode);
+  vertexName.push_back(name);
+  return nodeList.size()==vertexName.size()?nodeList.size():-1;
+}
+
+void listGraph::addEdge(int indexOne, int indexTwo,int weight){
   Node *currentNode=nodeList.at(indexOne);
   Node *newNode=new Node(indexTwo,weight,currentNode->nextNode);
   currentNode->nextNode=newNode;
