@@ -26,6 +26,7 @@ class multilistGraph: public graph{
     typedef struct{
       int vertexOne;
       int vertexTwo;
+      int weight;
       Edge* eDgeOne;
       Edge* nodeTwo;
     } Edge;
