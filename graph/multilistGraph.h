@@ -24,9 +24,10 @@ class multilistGraph: public graph{
     void printMatrix();
   private:
     typedef struct{
-      int index;
-      int weight;
-      Node* nextNode;
-    } Node;
-    std::vector<Node*> nodeList;
+      int vertexOne;
+      int vertexTwo;
+      Edge* eDgeOne;
+      Edge* nodeTwo;
+    } Edge;
+    std::vector<Edge*> nodeList;
 };
