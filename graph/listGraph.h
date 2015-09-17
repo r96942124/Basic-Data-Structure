@@ -8,7 +8,6 @@
 
 class listGraph: public graph{
   public:
-    listGraph():{}
 
     int addVertex(std::string name);
     //void deleteVertex(int index);
@@ -23,11 +22,11 @@ class listGraph: public graph{
     bool isEmpty();
     void printMatrix();
   private:
-    typedef struct{
-      Node(int index,int weight,Node* nextNode):index(index),weight(weight),nextNode(nextNode);
+    struct Node{
+      Node(int index,int weight,Node* nextNode):index(index),weight(weight),nextNode(nextNode){}
       int index;
       int weight;
       Node* nextNode;
-    } Node;
+    };
     std::vector<Node*> nodeList;
 };

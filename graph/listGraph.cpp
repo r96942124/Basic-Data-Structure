@@ -1,7 +1,7 @@
-#include<listGraph.h>
+#include"listGraph.h"
 
-int addVertex(std::string name){
-  Node *newNode=new Node(indexTwo,0,NULL);
+int listGraph::addVertex(std::string name){
+  Node *newNode=new Node(nodeList.size(),0,NULL);
   nodeList.push_back(newNode);
   vertexName.push_back(name);
   return nodeList.size()==vertexName.size()?nodeList.size():-1;
@@ -32,7 +32,7 @@ bool listGraph::deleteEdge(int indexOne,int indexTwo){
 }
 
 bool listGraph::searchEdge(int indexOne,int indexTwo){
-  Node* currentNode=nodeList.at(index)->nextNode;
+  Node* currentNode=nodeList.at(indexOne)->nextNode;
 
   while (currentNode){
        if(currentNode->index==indexTwo)
@@ -68,7 +68,7 @@ bool listGraph::isEmpty(){
 void listGraph::printMatrix(){
   int listSize=nodeList.size();
   Node* currentNode;
-  vector< vector<int> > matrix(listSize,vector<int>(listSize));
+  std::vector< std::vector<int> > matrix(listSize,std::vector<int>(listSize));
   
   for (int nodeNum;nodeNum<listSize;nodeNum++){
     currentNode=nodeList.at(nodeNum)->nextNode;
@@ -89,4 +89,8 @@ void listGraph::printMatrix(){
      }
      std::cout<<std::endl;
   }
+}
+
+int main()
+{
 }
