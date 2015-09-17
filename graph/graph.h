@@ -6,7 +6,7 @@ class graph{
     virtual void addVertex(std::string name) = 0;
     virtual void deleteVertex(int index) = 0;
     
-    void addEdge(int indexOne, int indexTwo){addEdge(indexOne,indexTwo,1);}
+    virtual void addEdge(int indexOne, int indexTwo){addEdge(indexOne,indexTwo,1);}
     virtual void addEdge(int indexOne, int indexTwo, int weight) = 0;
     virtual void deleteEdge(int indexOne,int indexTwo) = 0;
     
