@@ -12,6 +12,7 @@ class listGraph: public graph{
     int addVertex(std::string name);
     //void deleteVertex(int index);
     
+    void addEdge(int indexOne, int indexTwo){addEdge(indexOne,indexTwo,1);}
     void addEdge(int indexOne, int indexTwo,int weight);
     bool deleteEdge(int indexOne,int indexTwo);
     

@@ -1,5 +1,13 @@
 #include"listGraph.h"
 
+std::vector<int> listGraph::DFS(int index){
+     ;
+}
+
+std::vector<int> listGraph::BFS(int index){
+     ;
+}
+
 int listGraph::addVertex(std::string name){
   Node *newNode=new Node(nodeList.size(),0,NULL);
   nodeList.push_back(newNode);
@@ -69,28 +77,54 @@ void listGraph::printMatrix(){
   int listSize=nodeList.size();
   Node* currentNode;
   std::vector< std::vector<int> > matrix(listSize,std::vector<int>(listSize));
-  
-  for (int nodeNum;nodeNum<listSize;nodeNum++){
+
+  for (int nodeNum=0;nodeNum<listSize;nodeNum++){
     currentNode=nodeList.at(nodeNum)->nextNode;
     while (currentNode){
          matrix.at(nodeNum).at(currentNode->index)=currentNode->weight;
          currentNode=currentNode->nextNode;
     }
   }
-  
+  std::cout<<" "; 
   for (int i=0;i<listSize;i++){
      std::cout<<" "<<vertexName.at(i);
   }
-  
-  for (int i;i<listSize;i++){
+  std::cout<<std::endl;
+  for (int i=0;i<listSize;i++){
      std::cout<<vertexName.at(i)<<" ";
-     for (int j;j<listSize;j++){
-        std::cout<<matrix.at(i).at(j)<<" ";   
+     for (int j=0;j<listSize;j++){
+       std::cout<<matrix.at(i).at(j)<<" ";   
      }
      std::cout<<std::endl;
   }
+  std::cout<<std::endl;
 }
 
 int main()
 {
+
+listGraph a;
+std::cout<<"empty"<<a.isEmpty()<<std::endl;
+
+a.addVertex("A");
+a.printMatrix();
+
+a.addVertex("B");
+a.printMatrix();
+
+
+a.addVertex("C");
+a.printMatrix();
+
+
+a.addEdge(0,2);
+a.printMatrix();
+
+a.addEdge(0,1);
+a.printMatrix();
+
+a.deleteEdge(1,2);
+a.printMatrix();
+
+std::cout<<"empty"<<a.isEmpty()<<std::endl;
 }
