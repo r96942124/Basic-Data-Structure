@@ -1,11 +1,28 @@
 #include"listGraph.h"
 
-std::vector<int> listGraph::DFS(int index){
+std::vector<int> listGraph::BFS(int index){
      ;
 }
 
-std::vector<int> listGraph::BFS(int index){
-     ;
+TreeNode* listGraph::DFS(index rootIndex){
+     if (rootIndex < nodeList.size()){
+       std::vector<int> indexColor(nodeList.size());
+       return DFS(rootIndex,-1,indexColor);
+     }
+     return NULL;
+}
+
+TreeNode* listGraph::DFS(int child,int parent,std::vector<int> &indexColor){
+     TreeNode* parentNode=new TreeNode(child);
+     Node *graphNode=nodeList.at(rootIndex);
+     while (graphNode){
+          if (!indexColor.at(graphNode->index)){
+            vertexMark.at(graphNode->index)=1;
+            DFS(graphNode->index,rootIndex,vertexMark);  
+          }
+          graphNode=graphNode->nextNode;
+     }
+     return parentNode;
 }
 
 int listGraph::addVertex(std::string name){
