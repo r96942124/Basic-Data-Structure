@@ -1,24 +1,25 @@
 #include"listGraph.h"
 
-std::vector<int> listGraph::BFS(int index){
-     ;
-}
+/*TreeNode* listGraph::BFS(int index){
 
-TreeNode* listGraph::DFS(index rootIndex){
+}*/
+
+TreeNode* listGraph::DFS(int rootIndex){
      if (rootIndex < nodeList.size()){
-       std::vector<int> indexColor(nodeList.size());
-       return DFS(rootIndex,-1,indexColor);
+       std::vector<bool> indexMark(nodeList.size(),false);
+       indexMark.at(rootIndex)=true;
+       return DFS(rootIndex,indexMark);
      }
      return NULL;
 }
 
-TreeNode* listGraph::DFS(int child,int parent,std::vector<int> &indexColor){
-     TreeNode* parentNode=new TreeNode(child);
-     Node *graphNode=nodeList.at(rootIndex);
+TreeNode* listGraph::DFS(int index, std::vector<bool> &indexMark){
+     TreeNode* parentNode=new TreeNode(index);
+     Node *graphNode=nodeList.at(index);
      while (graphNode){
-          if (!indexColor.at(graphNode->index)){
-            vertexMark.at(graphNode->index)=1;
-            DFS(graphNode->index,rootIndex,vertexMark);  
+          if (!indexMark.at(graphNode->index)){
+            indexMark.at(graphNode->index)=true;
+            parentNode->childNode.push_back(DFS(graphNode->index,indexMark));  
           }
           graphNode=graphNode->nextNode;
      }
@@ -123,25 +124,28 @@ int main()
 listGraph a;
 std::cout<<"empty"<<a.isEmpty()<<std::endl;
 
-a.addVertex("A");
-a.printMatrix();
+a.addVertex("0");
+a.addVertex("1");
+a.addVertex("2");
+a.addVertex("3");
+a.addVertex("4");
+a.addVertex("5");
+a.addVertex("6");
+a.addVertex("7");
+a.addVertex("8");
 
-a.addVertex("B");
-a.printMatrix();
 
+a.addEdge(1,3);
+a.addEdge(1,2);
+a.addEdge(2,5);
+a.addEdge(2,4);
+a.addEdge(2,3);
+a.addEdge(3,8);
+a.addEdge(3,7);
+a.addEdge(4,5);
+a.addEdge(5,6);
 
-a.addVertex("C");
-a.printMatrix();
-
-
-a.addEdge(0,2);
-a.printMatrix();
-
-a.addEdge(0,1);
-a.printMatrix();
-
-a.deleteEdge(1,2);
-a.printMatrix();
-
-std::cout<<"empty"<<a.isEmpty()<<std::endl;
+//a.DFS(0);
+Tree b(a.DFS(0));
+b.levelOrder();
 }

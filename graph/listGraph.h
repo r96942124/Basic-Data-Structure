@@ -5,6 +5,7 @@
 #include<stack>
 #include<vector>
 #include<iterator>
+#include"tree.hpp"
 
 class listGraph: public graph{
   public:
@@ -12,7 +13,10 @@ class listGraph: public graph{
     int addVertex(std::string name);
     //void deleteVertex(int index);
     
-    void addEdge(int indexOne, int indexTwo){addEdge(indexOne,indexTwo,1);}
+    void addEdge(int indexOne, int indexTwo){
+        addEdge(indexOne,indexTwo,1);
+        addEdge(indexTwo,indexOne,1);
+    }
     void addEdge(int indexOne, int indexTwo,int weight);
     bool deleteEdge(int indexOne,int indexTwo);
     
@@ -22,6 +26,10 @@ class listGraph: public graph{
     void clearEdge(int index);
     bool isEmpty();
     void printMatrix();
+
+    TreeNode* DFS(int index);
+    //TreeNode* BFS(int index);
+    
   private:
     struct Node{
       Node(int index,int weight,Node* nextNode):index(index),weight(weight),nextNode(nextNode){}
@@ -30,4 +38,6 @@ class listGraph: public graph{
       Node* nextNode;
     };
     std::vector<Node*> nodeList;
+   
+    TreeNode* DFS(int index, std::vector<bool> &indexMark);
 };
