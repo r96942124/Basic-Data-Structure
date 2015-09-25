@@ -1,8 +1,62 @@
 #include"listGraph.h"
 
-/*TreeNode* listGraph::BFS(int index){
+TreeNode* listGraph::BFS(int index){
+    
+    if (index >=  nodeList.size()){
+      return NULL;
+    }
 
-}*/
+    std::vector<bool> indexMark(nodeList.size(),false);
+    TreeNode *root=new TreeNode(index);
+    TreeNode *parentNode;
+    TreeNode *childNode;
+    std::vector<TreeNode*> vecNode(nodeList.size(),NULL);
+  
+    Vertex *graphVertex=nodeList.at(index);
+
+    std::vector< std::vector<int> > indexLevel;
+    int topLevel=0;
+    int num=0;
+    
+    indexMark.at(index)=true;
+    indexLevel.push_back(std::vector<int>(1,index));  
+    vecNode.at(index)=root;
+     
+    while (!indexLevel.at(topLevel).empty()){
+         num=0;
+         indexLevel.push_back(std::vector<int>());
+         while (num < indexLevel.at(topLevel).size()){
+              graphVertex=nodeList.at(indexLevel.at(topLevel).at(num));
+              parentNode=vecNode.at(graphVertex->index);
+  
+              while (graphVertex->nextVertex){
+                   graphVertex=graphVertex->nextVertex;
+                   if (!indexMark.at(graphVertex->index)){
+                     indexMark.at(graphVertex->index)=true;
+                     indexLevel.at(topLevel+1).push_back(graphVertex->index);
+                     childNode = new TreeNode(graphVertex->index);
+                     parentNode->childNode.push_back(childNode);
+                     vecNode.at(graphVertex->index)=childNode;
+                   }
+              }
+              num++; 
+         }
+         topLevel++;   
+    }
+    indexLevel.erase(indexLevel.end()-1);
+
+    /*topLevel=0;
+    while (topLevel<indexLevel.size()){
+         std::cout<<"Level "<<topLevel<<": ";
+         for(num=0;num<indexLevel.at(topLevel).size();num++){
+             std::cout<<indexLevel.at(topLevel).at(num);
+         }
+         std::cout<<std::endl;
+         topLevel++;
+    }*/
+         
+    return root;
+}
 
 TreeNode* listGraph::DFS(int rootIndex){
      if (rootIndex < nodeList.size()){
@@ -15,75 +69,75 @@ TreeNode* listGraph::DFS(int rootIndex){
 
 TreeNode* listGraph::DFS(int index, std::vector<bool> &indexMark){
      TreeNode* parentNode=new TreeNode(index);
-     Node *graphNode=nodeList.at(index);
-     while (graphNode){
-          if (!indexMark.at(graphNode->index)){
-            indexMark.at(graphNode->index)=true;
-            parentNode->childNode.push_back(DFS(graphNode->index,indexMark));  
+     Vertex *graphVertex=nodeList.at(index);
+     while (graphVertex){
+          if (!indexMark.at(graphVertex->index)){
+            indexMark.at(graphVertex->index)=true;
+            parentNode->childNode.push_back(DFS(graphVertex->index,indexMark));  
           }
-          graphNode=graphNode->nextNode;
+          graphVertex=graphVertex->nextVertex;
      }
      return parentNode;
 }
 
 int listGraph::addVertex(std::string name){
-  Node *newNode=new Node(nodeList.size(),0,NULL);
-  nodeList.push_back(newNode);
+  Vertex *newVertex=new Vertex(nodeList.size(),0,NULL);
+  nodeList.push_back(newVertex);
   vertexName.push_back(name);
   return nodeList.size()==vertexName.size()?nodeList.size():-1;
 }
 
 void listGraph::addEdge(int indexOne, int indexTwo,int weight){
-  Node *currentNode=nodeList.at(indexOne);
-  Node *newNode=new Node(indexTwo,weight,currentNode->nextNode);
-  currentNode->nextNode=newNode;
+  Vertex *currentVertex=nodeList.at(indexOne);
+  Vertex *newVertex=new Vertex(indexTwo,weight,currentVertex->nextVertex);
+  currentVertex->nextVertex=newVertex;
 }
 
 bool listGraph::deleteEdge(int indexOne,int indexTwo){
-  Node* currentNode=nodeList.at(indexOne)->nextNode;
-  Node* preNode=nodeList.at(indexOne);
-  Node* nextNode;
-  while (currentNode){
-       if(currentNode->index==indexTwo){
+  Vertex* currentVertex=nodeList.at(indexOne)->nextVertex;
+  Vertex* preVertex=nodeList.at(indexOne);
+  Vertex* nextVertex;
+  while (currentVertex){
+       if(currentVertex->index==indexTwo){
           //protection
-          nextNode=currentNode->nextNode;
-          delete currentNode;
-          preNode->nextNode=nextNode;
+          nextVertex=currentVertex->nextVertex;
+          delete currentVertex;
+          preVertex->nextVertex=nextVertex;
           return true;
        }
-       preNode=currentNode;
-       currentNode=currentNode->nextNode;
+       preVertex=currentVertex;
+       currentVertex=currentVertex->nextVertex;
   }
   return false;
 }
 
 bool listGraph::searchEdge(int indexOne,int indexTwo){
-  Node* currentNode=nodeList.at(indexOne)->nextNode;
+  Vertex* currentVertex=nodeList.at(indexOne)->nextVertex;
 
-  while (currentNode){
-       if(currentNode->index==indexTwo)
+  while (currentVertex){
+       if(currentVertex->index==indexTwo)
           return true;
-       currentNode=currentNode->nextNode;
+       currentVertex=currentVertex->nextVertex;
   }
   return false;
 }
 
 void listGraph::listAdjacent(int index){
-  Node* currentNode=nodeList.at(index)->nextNode;
-  std::cout<<"Node "<<vertexName.at(index)<<"'s adjacency: ";
-  while (currentNode){
-       std::cout<<vertexName.at(currentNode->index);
-       currentNode=currentNode->nextNode;
+  Vertex* currentVertex=nodeList.at(index)->nextVertex;
+  std::cout<<"Vertex "<<vertexName.at(index)<<"'s adjacency: ";
+  while (currentVertex){
+       std::cout<<vertexName.at(currentVertex->index);
+       currentVertex=currentVertex->nextVertex;
   }
 }
 
 void listGraph::clearEdge(int index){
-  Node* currentNode=nodeList.at(index)->nextNode;
-  Node* nextNode;
-  while (currentNode){
-       nextNode=currentNode->nextNode;
-       delete currentNode;
-       currentNode=nextNode;
+  Vertex* currentVertex=nodeList.at(index)->nextVertex;
+  Vertex* nextVertex;
+  while (currentVertex){
+       nextVertex=currentVertex->nextVertex;
+       delete currentVertex;
+       currentVertex=nextVertex;
   }
 }
 
@@ -93,14 +147,14 @@ bool listGraph::isEmpty(){
 
 void listGraph::printMatrix(){
   int listSize=nodeList.size();
-  Node* currentNode;
+  Vertex* currentVertex;
   std::vector< std::vector<int> > matrix(listSize,std::vector<int>(listSize));
 
   for (int nodeNum=0;nodeNum<listSize;nodeNum++){
-    currentNode=nodeList.at(nodeNum)->nextNode;
-    while (currentNode){
-         matrix.at(nodeNum).at(currentNode->index)=currentNode->weight;
-         currentNode=currentNode->nextNode;
+    currentVertex=nodeList.at(nodeNum)->nextVertex;
+    while (currentVertex){
+         matrix.at(nodeNum).at(currentVertex->index)=currentVertex->weight;
+         currentVertex=currentVertex->nextVertex;
     }
   }
   std::cout<<" "; 
@@ -122,7 +176,7 @@ int main()
 {
 
 listGraph a;
-std::cout<<"empty"<<a.isEmpty()<<std::endl;
+//std::cout<<"empty"<<a.isEmpty()<<std::endl;
 
 a.addVertex("0");
 a.addVertex("1");
@@ -146,6 +200,6 @@ a.addEdge(4,5);
 a.addEdge(5,6);
 
 //a.DFS(0);
-Tree b(a.DFS(0));
+Tree b(a.BFS(1));
 b.levelOrder();
 }

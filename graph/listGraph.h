@@ -28,16 +28,16 @@ class listGraph: public graph{
     void printMatrix();
 
     TreeNode* DFS(int index);
-    //TreeNode* BFS(int index);
+    TreeNode* BFS(int index);
     
   private:
-    struct Node{
-      Node(int index,int weight,Node* nextNode):index(index),weight(weight),nextNode(nextNode){}
+    struct Vertex{
+      Vertex(int index,int weight,Vertex* nextVertex):index(index),weight(weight),nextVertex(nextVertex){}
       int index;
       int weight;
-      Node* nextNode;
+      Vertex* nextVertex;
     };
-    std::vector<Node*> nodeList;
+    std::vector<Vertex*> nodeList;
    
     TreeNode* DFS(int index, std::vector<bool> &indexMark);
 };
