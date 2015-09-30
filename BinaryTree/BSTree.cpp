@@ -5,6 +5,7 @@ void BinarySearchTree::deleteValue(TreeNode *node,int value){
 
   TreeNode *parentNode=NULL,*curNode=node;
   std::list<TreeNode*> leftSizeList;
+
   while(curNode){
        if (curNode->value==value){
          break;
@@ -19,50 +20,53 @@ void BinarySearchTree::deleteValue(TreeNode *node,int value){
          curNode=curNode->rightNode;
        }
   }
-  if(!curNode) return;
-  
+
+  if (!curNode){
+    std::cout<<"cannot delete due to no such key: "<< value<<std::endl;
+    treeSize++;
+    return;
+  }
+    
   while (!leftSizeList.empty()){
        TreeNode *tempNode=leftSizeList.front();
        leftSizeList.erase(leftSizeList.begin());
        tempNode->leftSize--;
   }
-
+  
+  // case 1: leaf
   if (!curNode->leftNode && !curNode->rightNode){
     if (parentNode->rightNode==curNode){
       parentNode->rightNode=NULL;
       delete curNode;
-      curNode=NULL;
     }
     else{
       parentNode->leftNode=NULL;
       delete curNode;
-      curNode=NULL;
     } 
   }
+  // case 2: NULL leftNode
   else if (!curNode->leftNode && curNode->rightNode){
     if (parentNode->rightNode==curNode){
       parentNode->rightNode=curNode->rightNode;
       delete curNode;
-      curNode=NULL; 
     } 
     else{
       parentNode->leftNode=curNode->rightNode;
       delete curNode;
-      curNode=NULL;
     }  
-  }  
+  }
+  // case 3: NULL rightNode  
   else if (curNode->leftNode && !curNode->rightNode){
     if (parentNode->rightNode==curNode){
       parentNode->rightNode=curNode->leftNode;
       delete curNode;
-      curNode=NULL;
     }
     else{
       parentNode->leftNode=curNode->leftNode;
       delete curNode;
-      curNode=NULL;
     }
   }
+  // case 4: degree 2
   else{
     if (left){
       left=false;
@@ -109,33 +113,40 @@ TreeNode* BinarySearchTree::searchRank(int rank){
 
 
 void BinarySearchTree::insert(int value){
+  std::list<TreeNode*> leftSizeList;
   if (!root){
     root=new TreeNode(value);
   }
   else{
-    insert(root,value);
+    insert(root,value,leftSizeList);
   }
   treeSize++;
+  while (!leftSizeList.empty()){
+       TreeNode *tempNode=leftSizeList.front();
+       leftSizeList.erase(leftSizeList.begin());
+       tempNode->leftSize++;
+  }
 }
 
-void BinarySearchTree::insert(TreeNode* node, int value){
+void BinarySearchTree::insert(TreeNode* node, int value,std::list<TreeNode*> &leftSizeList){
     if (value == node->value){
-      std::cout<<"duplicate key"<<std::endl;
+      std::cout<<"insertion failed due to duplicate key: "<<value<<std::endl;
       treeSize--;
+      leftSizeList.clear();
       return;
     } 
     else if (value > node->value ){
       if (node->rightNode){
-        insert(node->rightNode,value);
+        insert(node->rightNode,value,leftSizeList);
       }
       else{
         node->rightNode=new TreeNode(value);      
       }
     }
     else{
-      node->leftSize++;
+      leftSizeList.push_back(node);
       if (node->leftNode){
-        insert(node->leftNode,value);
+        insert(node->leftNode,value,leftSizeList);
       }
       else{
         node->leftNode=new TreeNode(value);
@@ -246,7 +257,6 @@ int main()
   a.insert(14);
   a.insert(19);
   a.insert(21);  
-
   a.levelOrder();
   a.check();
   //std::cout<<a.treeSize<<std::endl;
@@ -254,7 +264,7 @@ int main()
   a.levelOrder();
   a.check();
   //std::cout<<a.treeSize<<std::endl;
-  a.deleteValue(10);
+  a.deleteValue(15);
   a.levelOrder();
   a.check();
   a.deleteValue(2);

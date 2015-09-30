@@ -65,6 +65,6 @@ class BinarySearchTree{
     void deleteTree(){deleteTree(&root);}
     void deleteTree(TreeNode **node);
     
-    void insert(TreeNode* node,int value);
+    void insert(TreeNode* node,int value,std::list<TreeNode*> &leftSizeList);
     void deleteValue(TreeNode *node,int value);
 };
