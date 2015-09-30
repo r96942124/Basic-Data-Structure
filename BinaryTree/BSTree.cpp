@@ -1,7 +1,149 @@
-#include"BinaryTree.h"
+#include"BSTree.h"
+
+void BinarySearchTree::deleteValue(TreeNode *node,int value){
+  static bool left=true;
+
+  TreeNode *parentNode=NULL,*curNode=node;
+  std::list<TreeNode*> leftSizeList;
+  while(curNode){
+       if (curNode->value==value){
+         break;
+       }
+       else if (curNode->value > value){
+         leftSizeList.push_back(curNode);
+         parentNode=curNode; 
+         curNode=curNode->leftNode;
+       }
+       else{
+         parentNode=curNode;
+         curNode=curNode->rightNode;
+       }
+  }
+  if(!curNode) return;
+  
+  while (!leftSizeList.empty()){
+       TreeNode *tempNode=leftSizeList.front();
+       leftSizeList.erase(leftSizeList.begin());
+       tempNode->leftSize--;
+  }
+
+  if (!curNode->leftNode && !curNode->rightNode){
+    if (parentNode->rightNode==curNode){
+      parentNode->rightNode=NULL;
+      delete curNode;
+      curNode=NULL;
+    }
+    else{
+      parentNode->leftNode=NULL;
+      delete curNode;
+      curNode=NULL;
+    } 
+  }
+  else if (!curNode->leftNode && curNode->rightNode){
+    if (parentNode->rightNode==curNode){
+      parentNode->rightNode=curNode->rightNode;
+      delete curNode;
+      curNode=NULL; 
+    } 
+    else{
+      parentNode->leftNode=curNode->rightNode;
+      delete curNode;
+      curNode=NULL;
+    }  
+  }  
+  else if (curNode->leftNode && !curNode->rightNode){
+    if (parentNode->rightNode==curNode){
+      parentNode->rightNode=curNode->leftNode;
+      delete curNode;
+      curNode=NULL;
+    }
+    else{
+      parentNode->leftNode=curNode->leftNode;
+      delete curNode;
+      curNode=NULL;
+    }
+  }
+  else{
+    if (left){
+      left=false;
+      TreeNode *newRoot=curNode;
+      curNode=curNode->leftNode;
+      while (curNode->rightNode){
+           curNode=curNode->rightNode;
+      }
+      newRoot->value=curNode->value+1;
+      deleteValue(newRoot,curNode->value);  
+      newRoot->value=newRoot->value-1;  
+    }    
+    else{
+      left=true;
+      TreeNode *newRoot=curNode;
+      curNode=curNode->rightNode;
+      while (curNode->leftNode){
+           curNode=curNode->leftNode;
+      }
+      newRoot->value=curNode->value-1;
+      deleteValue(newRoot,curNode->value);
+      newRoot->value=newRoot->value+1;
+    }
+  }
+}
+
+TreeNode* BinarySearchTree::searchRank(int rank){
+  TreeNode *node=root;
+  while (node){
+       if (node->leftSize==rank){
+         return node;
+       }
+       else if(node->leftSize > rank){
+         node=node->leftNode;
+       }
+       else{
+           rank=rank-node->leftSize;
+           node=node->rightNode;
+       }
+  }
+  return NULL;
+}
 
 
-bool search(int value){
+
+void BinarySearchTree::insert(int value){
+  if (!root){
+    root=new TreeNode(value);
+  }
+  else{
+    insert(root,value);
+  }
+  treeSize++;
+}
+
+void BinarySearchTree::insert(TreeNode* node, int value){
+    if (value == node->value){
+      std::cout<<"duplicate key"<<std::endl;
+      treeSize--;
+      return;
+    } 
+    else if (value > node->value ){
+      if (node->rightNode){
+        insert(node->rightNode,value);
+      }
+      else{
+        node->rightNode=new TreeNode(value);      
+      }
+    }
+    else{
+      node->leftSize++;
+      if (node->leftNode){
+        insert(node->leftNode,value);
+      }
+      else{
+        node->leftNode=new TreeNode(value);
+      }
+    }  
+}
+
+bool BinarySearchTree::search(int value){
   TreeNode *curNode=root;
   while(curNode){
        if(curNode->value==value) return true;
@@ -11,39 +153,8 @@ bool search(int value){
   return false;
 }
 
-BinaryTree::BinaryTree(const BinaryTree  &copyTree)
-{
-  deleteTree();
-  root=copy(copyTree.root);
-}
 
-BinaryTree& BinaryTree::operator=(const BinaryTree &assignTree)
-{
-  if(this!=&assignTree){
-    deleteTree();
-    root=copy(assignTree.root);
-  }
-  return *this;
-}
-
-TreeNode* BinaryTree::copy(const TreeNode * origNode)
-{
-  if(!origNode) return NULL;
-  TreeNode *currentNode=new TreeNode(origNode->value,origNode->leftSize);
-  if(origNode->leftNode) currentNode->leftNode=copy(origNode->leftNode);
-  if(origNode->rightNode) currentNode->rightNode=copy(origNode->rightNode);
-  return currentNode;
-}
-
-bool BinaryTree::equal(const TreeNode *thisNode,  const TreeNode *compareNode)
-{
-  if(!thisNode && !compareNode) return true;
-  if(thisNode && compareNode && thisNode->value==compareNode->value && equal(thisNode->leftNode,compareNode->leftNode) &&equal(thisNode->rightNode,compareNode->rightNode))
-    return true;
-  return false;  
-}
-
-void BinaryTree::deleteTree(TreeNode** currentNode)
+void BinarySearchTree::deleteTree(TreeNode** currentNode)
 {
   if(*currentNode){
     deleteTree(&((*currentNode)->leftNode));
@@ -56,7 +167,7 @@ void BinaryTree::deleteTree(TreeNode** currentNode)
   } 
 }
 
-void BinaryTree::preorder(TreeNode * currentNode)
+void BinarySearchTree::preorder(TreeNode * currentNode)
 {
   if(currentNode!=NULL){
     std::cout<<currentNode->value<<" ";
@@ -68,7 +179,7 @@ void BinaryTree::preorder(TreeNode * currentNode)
 
 
 
-void BinaryTree::inorder(TreeNode * currentNode)
+void BinarySearchTree::inorder(TreeNode * currentNode)
 {
   if(currentNode!=NULL){
     inorder(currentNode->leftNode);
@@ -79,7 +190,7 @@ void BinaryTree::inorder(TreeNode * currentNode)
 }
 
 
-void BinaryTree::postorder(TreeNode * currentNode)
+void BinarySearchTree::postorder(TreeNode * currentNode)
 {
   if(currentNode!=NULL){
     postorder(currentNode->leftNode);
@@ -90,7 +201,7 @@ void BinaryTree::postorder(TreeNode * currentNode)
 }
 
 
-void BinaryTree::levelorderQueue()
+void BinarySearchTree::levelOrder()
 {
   std::queue<TreeNode*> nodeQueue;
   TreeNode *currentNode=root;
@@ -103,9 +214,10 @@ void BinaryTree::levelorderQueue()
     if(currentNode->leftNode) nodeQueue.push(currentNode->leftNode);
     if(currentNode->rightNode) nodeQueue.push(currentNode->rightNode); 
   }while(!nodeQueue.empty());
+  std::cout<<std::endl;
 }
 
-void BinaryTree::levelorderLeftSizeQueue()
+void BinarySearchTree::levelOrderLeftSize()
 {
   std::queue<TreeNode*> nodeQueue;
   TreeNode *currentNode=root;
@@ -118,9 +230,38 @@ void BinaryTree::levelorderLeftSizeQueue()
     if(currentNode->leftNode) nodeQueue.push(currentNode->leftNode);
     if(currentNode->rightNode) nodeQueue.push(currentNode->rightNode);
   }while(!nodeQueue.empty());
+  std::cout<<std::endl;
 }
 
 int main()
 {
-  BinaryTree< testTree;
+  BinarySearchTree a;
+  a.insert(10);  
+  a.insert(15);
+  a.insert(2);
+  a.insert(4);
+  a.insert(13);
+  a.insert(20);
+  a.insert(12);
+  a.insert(14);
+  a.insert(19);
+  a.insert(21);  
+
+  a.levelOrder();
+  a.check();
+  //std::cout<<a.treeSize<<std::endl;
+  a.deleteValue(15); 
+  a.levelOrder();
+  a.check();
+  //std::cout<<a.treeSize<<std::endl;
+  a.deleteValue(10);
+  a.levelOrder();
+  a.check();
+  a.deleteValue(2);
+  a.levelOrder();
+  a.check();
+  a.deleteValue(4);
+  a.levelOrder();
+  a.check();
+  return 0;
 } 

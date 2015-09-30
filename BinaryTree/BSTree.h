@@ -4,12 +4,14 @@
 #include<queue>
 #include<stack>
 #include<algorithm> 
+#include<list>
 
 class TreeNode{
   public:
-    template<typename U> friend class BinaryTree;
-    TreeNode(int value): value(value),leftNode(NULL),rightNode(NULL){;}
-    TreeNode(int value,int leftSize): value(value),leftsize(leftSize),leftNode(NULL),rightNode(NULL){;}
+    friend class BinarySearchTree;
+    TreeNode(int value): value(value),leftSize(1),leftNode(NULL),rightNode(NULL){;}
+    TreeNode(int value,int leftSize): value(value),leftSize(leftSize),leftNode(NULL),rightNode(NULL){;}
+    int getValue(){return value;}
   protected:
     int value;
     int leftSize;
@@ -19,41 +21,50 @@ class TreeNode{
 
 class BinarySearchTree{
   public:
-    BinaryTree(const int value){ root = new TreeNode(value,0);}
-    BinaryTree(const BinaryTree & copyTree);
-    BinaryTree();
-    ~BinaryTree(){deleteTree();}
+    BinarySearchTree(const int value):treeSize(1){ root = new TreeNode(value,0);}
+    BinarySearchTree():root(NULL),treeSize(0){}
+    ~BinarySearchTree(){deleteTree();}
     
-    BinaryTree& operator=(const BinaryTree & assignTree);
-    bool operator==(const BinaryTree & tree2){return equal(root,tree2.root);}
      
     bool ifEmpty(){ return root==NULL?1:0;}
      
     void insert(int value);
-    int searchRank(int rank);
+    TreeNode* searchRank(int rank);
     bool search(int value); 
-    void deleteValue(int value);
-    void deleteRank(int rank);   
+    void deleteValue(int value){
+      std::cout<<"delete: "<<value<<std::endl;
+      deleteValue(root,value);
+      treeSize--;
+    }
+    //void deleteRank(int rank);   
   
     void preorder() {preorder(root);}
     void inorder()  {inorder(root);}
     void postorder(){postorder(root);} 
-    void levelorderQueue();
-    void levelorderLeftSizeQueue();    
+    void levelOrder();
+    void levelOrderLeftSize();   
+   
+    void check(){
+        for(int i=0;i<treeSize;i++){
+            std::cout<<searchRank(i+1)->value<<" ";
+        }
+        std::cout<<std::endl<<std::endl;
+    } 
 
-   protected:
+  protected:
     TreeNode *root;
-    std::vector preorderVec;
-    std::vector inorderVec;
-    std::vector postorderVec;
+    int treeSize;
+    std::vector<int> preorderVec;
+    std::vector<int> inorderVec;
+    std::vector<int> postorderVec;
     
     void preorder(TreeNode * currentNode);
     void inorder(TreeNode * currentNode);
     void postorder(TreeNode * currentNode);
-    void levelorder(TreeNode * currentNode);
 
-    TreeNode* copy(const TreeNode * origNode);
     void deleteTree(){deleteTree(&root);}
     void deleteTree(TreeNode **node);
-    bool equal(const TreeNode *thisNode, const TreeNode *compareNode); 
+    
+    void insert(TreeNode* node,int value);
+    void deleteValue(TreeNode *node,int value);
 };
